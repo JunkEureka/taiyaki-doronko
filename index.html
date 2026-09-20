@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>たい焼き販売管理システム</title>
+
+    style.css
+
+    https://cdn.jsdelivr.net/npm/chart.jsscript>
+</head>
+<body>
+
+<header>
+    <h1>🐟 たい焼き販売管理システム</h1>
+
+    <div class="day-select">
+        <label>営業日</label>
+
+        <select id="festivalDay">
+            <option value="day1">1日目</option>
+            <option value="day2">2日目</option>
+            <option value="day3">3日目</option>
+        </select>
+    </div>
+</header>
+
+<div class="main-grid">
+
+    <!-- 在庫 -->
+    <section class="panel">
+        <h2>在庫</h2>
+
+        <div id="inventoryArea"></div>
+    </section>
+
+    <!-- お待ち -->
+    <section class="panel">
+        <h2>お待ちのお客様</h2>
+
+        <div class="waiting-count">
+            現在 <span id="waitingCount">0</span> 組
+        </div>
+
+        <div id="waitingList"></div>
+    </section>
+
+    <!-- 注文 -->
+    <section class="panel">
+        <h2>注文追加</h2>
+
+        <div id="orderInputs">
+
+            <div class="input-row">
+                <label>あんこ</label>
+                <input type="number" id="orderAnko" min="0" value="0">
+            </div>
+
+            <div class="input-row">
+                <label>カスタード</label>
+                <input type="number" id="orderCustard" min="0" value="0">
+            </div>
+
+            <div class="input-row">
+                <label>シナモンアップル</label>
+                <input type="number" id="orderApple" min="0" value="0">
+            </div>
+
+            <div class="input-row">
+                <label>ジャーマンポテト</label>
+                <input type="number" id="orderPotato" min="0" value="0">
+            </div>
+
+        </div>
+
+        <button id="orderBtn">
+            注文受付
+       
