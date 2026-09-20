@@ -1,170 +1,273 @@
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+const STORAGE_KEY = "taiyaki-festival-v3";
+
+function createDayData() {
+    return {
+        stock: {
+            anko: 0,
+            custard: 0,
+            apple: 0,
+            potato: 0
+        },
+        waiting: [],
+        history: [],
+        revenue: 0,
+        sold: {
+            anko: 0,
+            custard: 0,
+            apple: 0,
+            potato: 0
+        },
+        nextOrderNo: 1
+    };
 }
 
-body{
-    font-family:sans-serif;
-    background:#f5f5f5;
-    color:#333;
-    padding:15px;
+let state = JSON.parse(localStorage.getItem(STORAGE_KEY));
+
+if (!state) {
+    state = {
+        days: {
+            day1: createDayData(),
+            day2: createDayData(),
+            day3: createDayData()
+        }
+    };
 }
 
-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:15px;
+function currentDay() {
+    return document.getElementById("festivalDay").value;
 }
 
-h1{
-    font-size:28px;
+function currentData() {
+    return state.days[currentDay()];
 }
 
-.day-select{
-    display:flex;
-    gap:10px;
-    align-items:center;
+function save() {
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(state)
+    );
+
+    render();
 }
 
-.main-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:15px;
-    margin-bottom:15px;
+function render() {
+
+    renderInventory();
+    renderWaiting();
+    renderSummary();
 }
 
-.panel{
-    background:white;
-    border-radius:12px;
-    padding:15px;
-    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+function renderInventory() {
+
+    const data = currentData();
+
+    const area =
+        document.getElementById(
+            "inventoryArea"
+        );
+
+    area.innerHTML = "";
+
+    const items = [
+        ["あんこ", "anko"],
+        ["カスタード", "custard"],
+        ["シナモンアップル", "apple"],
+        ["ジャーマンポテト", "potato"]
+    ];
+
+    items.forEach(item => {
+
+        area.innerHTML += `
+            <div class="stock-row">
+                <span>${item[0]}</span>
+                <span>${data.stock[item[1]]}個</span>
+            </div>
+        `;
+
+    });
 }
 
-.panel h2{
-    margin-bottom:12px;
+function renderWaiting() {
+
+    const data = currentData();
+
+    document.getElementById(
+        "waitingCount"
+    ).textContent =
+        data.waiting.length;
+
+    const area =
+        document.getElementById(
+            "waitingList"
+        );
+
+    area.innerHTML = "";
+
+    data.waiting.forEach(order => {
+
+        area.innerHTML += `
+            <div class="waiting-item">
+                <div>
+                    <strong>
+                        No.${order.no}
+                    </strong>
+                    <br>
+                    ${order.text}
+                </div>
+            </div>
+        `;
+    });
 }
 
-.input-row{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:10px;
+function renderSummary() {
+
+    const data = currentData();
+
+    document.getElementById(
+        "revenue"
+    ).textContent =
+        "¥" + data.revenue;
+
+    const sold =
+        data.sold.anko +
+        data.sold.custard +
+        data.sold.apple +
+        data.sold.potato;
+
+    document.getElementById(
+        "soldCount"
+    ).textContent =
+        sold + "個";
 }
 
-.input-row input{
-    width:80px;
-    padding:8px;
-}
+document
+.getElementById("stockBtn")
+.addEventListener(
+    "click",
+    () => {
 
-button{
-    width:100%;
-    border:none;
-    border-radius:10px;
-    padding:12px;
-    background:#3b82f6;
-    color:white;
-    font-weight:bold;
-    cursor:pointer;
-}
+        const data =
+            currentData();
 
-button:hover{
-    background:#2563eb;
-}
+        data.stock.anko +=
+            Number(
+                document.getElementById(
+                    "stockAnko"
+                ).value
+            );
 
-.summary{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:15px;
-    margin-bottom:15px;
-}
+        data.stock.custard +=
+            Number(
+                document.getElementById(
+                    "stockCustard"
+                ).value
+            );
 
-.summary-card{
-    background:white;
-    border-radius:12px;
-    padding:20px;
-    text-align:center;
-    box-shadow:0 2px 8px rgba(0,0,0,0.1);
-}
+        data.stock.apple +=
+            Number(
+                document.getElementById(
+                    "stockApple"
+                ).value
+            );
 
-.summary-card p{
-    font-size:30px;
-    font-weight:bold;
-    margin-top:10px;
-}
+        data.stock.potato +=
+            Number(
+                document.getElementById(
+                    "stockPotato"
+                ).value
+            );
 
-.stock-row{
-    display:flex;
-    justify-content:space-between;
-    padding:10px 0;
-    border-bottom:1px solid #eee;
-}
-
-.stock-warning{
-    color:orange;
-    font-weight:bold;
-}
-
-.stock-danger{
-    color:red;
-    font-weight:bold;
-}
-
-.waiting-item{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    background:#fafafa;
-    border:1px solid #ddd;
-    padding:10px;
-    border-radius:8px;
-    margin-bottom:8px;
-}
-
-.waiting-item button{
-    width:auto;
-    padding:8px 12px;
-}
-
-table{
-    width:100%;
-    border-collapse:collapse;
-}
-
-th{
-    background:#efefef;
-}
-
-th,
-td{
-    border:1px solid #ddd;
-    padding:8px;
-    text-align:center;
-}
-
-.button-group{
-    display:grid;
-    grid-template-columns:1fr 1fr 1fr;
-    gap:10px;
-}
-
-#salesChart{
-    max-height:300px;
-}
-
-@media(max-width:900px){
-
-    .main-grid{
-        grid-template-columns:1fr;
+        save();
     }
+);
 
-    .summary{
-        grid-template-columns:1fr;
+document
+.getElementById("orderBtn")
+.addEventListener(
+    "click",
+    () => {
+
+        const data =
+            currentData();
+
+        const anko =
+            Number(
+                document.getElementById(
+                    "orderAnko"
+                ).value
+            );
+
+        const custard =
+            Number(
+                document.getElementById(
+                    "orderCustard"
+                ).value
+            );
+
+        const apple =
+            Number(
+                document.getElementById(
+                    "orderApple"
+                ).value
+            );
+
+        const potato =
+            Number(
+                document.getElementById(
+                    "orderPotato"
+                ).value
+            );
+
+        if (
+            anko +
+            custard +
+            apple +
+            potato === 0
+        ) {
+            alert("注文数を入力してください");
+            return;
+        }
+
+        const parts = [];
+
+        if (anko)
+            parts.push(
+                `あん${anko}`
+            );
+
+        if (custard)
+            parts.push(
+                `カス${custard}`
+            );
+
+        if (apple)
+            parts.push(
+                `シナ${apple}`
+            );
+
+        if (potato)
+            parts.push(
+                `ポテ${potato}`
+            );
+
+        data.waiting.push({
+            no:
+                data.nextOrderNo++,
+            text:
+                parts.join(" ")
+        });
+
+        save();
     }
+);
 
-    .button-group{
-        grid-template-columns:1fr;
-    }
+document
+.getElementById(
+    "festivalDay"
+)
+.addEventListener(
+    "change",
+    render
+);
 
-}
+render();
