@@ -512,3 +512,96 @@ function addStock(){
 
     save();
 }
+
+    // ====================
+// お渡し処理
+// ====================
+
+function deliverOrder(orderNo){
+
+    const day = currentData();
+
+    const order =
+        day.waiting.find(
+            x => x.no === orderNo
+        );
+
+    if(!order){
+        return;
+    }
+
+    // 在庫チェック
+
+    if(
+        day.stock.anko < order.anko ||
+        day.stock.custard < order.custard ||
+        day.stock.apple < order.apple ||
+        day.stock.potato < order.potato
+    ){
+
+        alert(
+            "在庫が不足しています"
+        );
+
+        return;
+    }
+
+    // 在庫減少
+
+    day.stock.anko -= order.anko;
+    day.stock.custard -= order.custard;
+    day.stock.apple -= order.apple;
+    day.stock.potato -= order.potato;
+
+    // 販売数加算
+
+    day.sold.anko += order.anko;
+    day.sold.custard += order.custard;
+    day.sold.apple += order.apple;
+    day.sold.potato += order.potato;
+
+    // 金額計算
+
+    const amount =
+
+        order.anko * 150 +
+
+        order.custard * 150 +
+
+        order.apple * 200 +
+
+        order.potato * 200;
+
+    day.revenue += amount;
+
+    // 履歴追加
+
+    day.history.push({
+
+        no: order.no,
+
+        time:
+            new Date()
+            .toLocaleTimeString(
+                "ja-JP",
+                {
+                    hour: "2-digit",
+                    minute: "2-digit"
+                }
+            ),
+
+        detail: order.text,
+
+        amount: amount
+
+    });
+
+    // 待機列から削除
+
+    day.waiting =
+        day.waiting.filter(
+            x => x.no !== orderNo
+        );
+
+    save();
+}
