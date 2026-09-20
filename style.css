@@ -202,10 +202,10 @@ function renderWaiting() {
 
             </div>
 
-            <button>
-
+            <button
+                onclick="deliverOrder(${order.no})"
+            >
                 お渡し
-
             </button>
 
         </div>
