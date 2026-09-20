@@ -75,4 +75,141 @@
 
         <button id="orderBtn">
             注文受付
-       
+        </button>
+
+    </section>
+
+    <!-- 在庫追加 -->
+    <section class="panel">
+        <h2>在庫追加</h2>
+
+        <div id="stockInputs">
+
+            <div class="input-row">
+                <label>あんこ</label>
+                <input type="number" id="stockAnko" min="0" value="0">
+            </div>
+
+            <div class="input-row">
+                <label>カスタード</label>
+                <input type="number" id="stockCustard" min="0" value="0">
+            </div>
+
+            <div class="input-row">
+                <label>シナモンアップル</label>
+                <input type="number" id="stockApple" min="0" value="0">
+            </div>
+
+            <div class="input-row">
+                <label>ジャーマンポテト</label>
+                <input type="number" id="stockPotato" min="0" value="0">
+            </div>
+
+        </div>
+
+        <button id="stockBtn">
+            在庫追加
+        </button>
+
+    </section>
+
+</div>
+
+<!-- 売上サマリー -->
+
+<div class="summary">
+
+    <div class="summary-card">
+        <h3>今日の売上</h3>
+        <p id="revenue">¥0</p>
+    </div>
+
+    <div class="summary-card">
+        <h3>販売数</h3>
+        <p id="soldCount">0個</p>
+    </div>
+
+</div>
+
+<!-- グラフ -->
+
+<section class="panel">
+
+    <h2>今日の売れ行き</h2>
+
+    <canvas id="salesChart"></canvas>
+
+</section>
+
+<!-- 購入履歴 -->
+
+<section class="panel">
+
+    <h2>購入履歴</h2>
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>時刻</th>
+                <th>内容</th>
+                <th>金額</th>
+            </tr>
+        </thead>
+
+        <tbody id="historyTable">
+
+        </tbody>
+
+    </table>
+
+</section>
+
+<!-- 集計 -->
+
+<section class="panel">
+
+    <h2>3日間集計</h2>
+
+    <div id="threeDaySummary">
+
+    </div>
+
+</section>
+
+<!-- バックアップ -->
+
+<section class="panel">
+
+    <h2>バックアップ・出力</h2>
+
+    <div class="button-group">
+
+        <button id="backupBtn">
+            バックアップ保存
+        </button>
+
+        <button id="restoreBtn">
+            バックアップ復元
+        </button>
+
+        <button id="csvBtn">
+            CSV出力
+        </button>
+
+    </div>
+
+    <input
+        type="file"
+        id="restoreFile"
+        accept=".json"
+        hidden
+    >
+
+</section>
+
+script.jsscript>
+
+</body>
+</html>
